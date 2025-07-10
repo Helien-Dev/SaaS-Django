@@ -32,3 +32,5 @@ typing-extensions==4.14.1
     # via psycopg
 urllib3==2.5.0
     # via requests
+whitenoise==6.9.0
+    # via django-saas (pyproject.toml)
