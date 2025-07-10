@@ -17,23 +17,22 @@ ENV PYTHONUNBUFFERED 1
 
 # Install os dependencies for our mini vm
 RUN apt-get update && apt-get install -y \
-    pkg-config \
-    libdbus-1-dev \
+    build-essential \
     python3-dev \
-    gcc \
+    libdbus-1-dev \
+    libglib2.0-dev \
+    pkg-config \
     cmake \
     meson \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/*
 
-# Create the mini vm's code directory
-RUN mkdir -p /code
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Set the working directory to that same code directory
 WORKDIR /code
 
 # Copy the requirements file into the container
-COPY requirements.txt /tmp/requirements.txt
 
 # copy the project code into the container's working directory
 COPY ./src /code
