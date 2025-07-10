@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-#1o0@#(8i0w7*xqjprk7a(wx8q3uq4#a=edz2avv7l8x^!+^@l
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    ".trycloudflare.com"
+    ".trycloudflare.com",
+    ".railway.app"
 ]
 
 if DEBUG:
