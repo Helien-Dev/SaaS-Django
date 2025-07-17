@@ -7,10 +7,10 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        PYTHON_VERSION: ${PYTHON_VERSION}
+        PYTHON_VERSION: 3.12-slim-bullseye
         DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
         DJANGO_DEBUG: ${DJANGO_DEBUG}
-        PROJ_NAME: ${PROJ_NAME}
+        PROJ_NAME: "SaaS_Project"
     ports:
       - "8000:8000"
     environment:
@@ -27,7 +27,7 @@ services:
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      PORT: ${PORT}
+      PORT: 8000
       PROJ_NAME: ${PROJ_NAME}
     volumes:
       - ./src:/code
