@@ -32,18 +32,19 @@ ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 ARG DJANGO_DEBUG=0
 ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 
+ARG PROJ_NAME="SaaS_Project"
+ENV PROJ_NAME=${PROJ_NAME}
+
 WORKDIR /code
 COPY ./src /code
 
-ARG PROJ_NAME="SaaS_Project"
-
-RUN printf "#!/bin/bash\n" > ./paracord_runner.sh && \
-    printf "RUN_PORT=\"\${PORT:-8000}\"\n\n" >> ./paracord_runner.sh && \
-    printf "python manage.py migrate --no-input\n" >> ./paracord_runner.sh && \
-    printf "python manage.py collectstatic --noinput\n" >> ./paracord_runner.sh && \
-    printf "python manage.py vendor_pull || echo 'vendor_pull skipped'\n" >> ./paracord_runner.sh && \
-    printf "gunicorn ${PROJ_NAME}.wsgi:application --bind \"[::]:\$RUN_PORT\"\n" >> ./paracord_runner.sh
+RUN printf '#!/bin/sh\n' > ./paracord_runner.sh && \
+    printf 'PORT="${PORT:-8000}"\n' >> ./paracord_runner.sh && \
+    printf 'python manage.py migrate --no-input\n' >> ./paracord_runner.sh && \
+    printf 'python manage.py collectstatic --noinput\n' >> ./paracord_runner.sh && \
+    printf 'python manage.py vendor_pull || echo "vendor_pull skipped"\n' >> ./paracord_runner.sh && \
+    printf 'gunicorn "$PROJ_NAME.wsgi:application" --bind "[::]:$PORT"\n' >> ./paracord_runner.sh
 
 RUN chmod +x paracord_runner.sh
 
-CMD ./paracord_runner.sh
+CMD ["./paracord_runner.sh"]
