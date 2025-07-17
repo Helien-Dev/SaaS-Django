@@ -42,7 +42,8 @@ MANAGERS=ADMINS
 
 ALLOWED_HOSTS = [
     "*.trycloudflare.com",
-    ".railway.app"
+    ".railway.app",
+    "*"
 ]
 
 if DEBUG:

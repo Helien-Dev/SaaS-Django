@@ -1,26 +1,22 @@
-#!/bin/sh
+#!/bin/bash
 
-# Esperar a que la base de datos esté lista (ajusta si usas base de datos)
-echo "Esperando a que la base de datos esté lista..."
-sleep 5
+# Establece un puerto por defecto si no se proporciona
+RUN_PORT="${PORT:-8000}"
 
-# Ejecutar migraciones
-echo "Ejecutando migraciones..."
-python manage.py migrate --noinput
+echo "🔧 Esperando a que la base de datos esté disponible..."
 
-# Crear superusuario si no existe (ajustable)
-echo "Creando superusuario si no existe..."
-echo "
-from django.contrib.auth import get_user_model
-User = get_user_model()
-if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
-" | python manage.py shell
+# Aquí puedes agregar una espera opcional si la DB no está lista inmediatamente.
+# Ejemplo con sleep o un script tipo wait-for-it si usas base de datos externa.
+# sleep 5
 
-# Recoger archivos estáticos
-echo "Recolectando archivos estáticos..."
+echo "✅ Ejecutando vendor_pull..."
+python manage.py vendor_pull
+
+echo "✅ Ejecutando collectstatic..."
 python manage.py collectstatic --noinput
 
-# Iniciar el servidor Gunicorn
-echo "Iniciando Gunicorn..."
-gunicorn SaaS_Project.wsgi:application --bind 0.0.0.0:8000
+echo "✅ Ejecutando migraciones..."
+python manage.py migrate --noinput
+
+echo "🚀 Iniciando Gunicorn en el puerto $RUN_PORT..."
+gunicorn SaaS_Project.wsgi:application --bind "0.0.0.0:$RUN_PORT"

@@ -9,15 +9,11 @@ services:
       args:
         PYTHON_VERSION: 3.13.5-slim-bullseye
         DJANGO_SECRET_KEY: "django-insecure-#1o0@#(8i0w7*xqjprk7a(wx8q3uq4#a=edz2avv7l8x^!+^@l"
-        DJANGO_DEBUG: 0
+        DJANGO_DEBUG: 1
         PROJ_NAME: "SaaS_Project"
+    env_file: .env
     ports:
       - "8000:8000"
-    environment:
-      DJANGO_SECRET_KEY: "django-insecure-#1o0@#(8i0w7*xqjprk7a(wx8q3uq4#a=edz2avv7l8x^!+^@l"
-      DJANGO_DEBUG: 0
-      PORT: 8000
-      PROJ_NAME: "SaaS_Project"
     volumes:
       - ./src:/code
     restart: unless-stopped
