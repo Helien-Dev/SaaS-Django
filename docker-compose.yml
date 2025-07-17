@@ -7,13 +7,28 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        PYTHON_VERSION: 3.13.5-slim-bullseye
-        DJANGO_SECRET_KEY: "django-insecure-#1o0@#(8i0w7*xqjprk7a(wx8q3uq4#a=edz2avv7l8x^!+^@l"
-        DJANGO_DEBUG: 1
-        PROJ_NAME: "SaaS_Project"
-    # env_file: .env
+        PYTHON_VERSION: ${PYTHON_VERSION}
+        DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+        DJANGO_DEBUG: ${DJANGO_DEBUG}
+        PROJ_NAME: ${PROJ_NAME}
     ports:
       - "8000:8000"
+    environment:
+      DJANGO_DEBUG: ${DJANGO_DEBUG}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+      EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      PORT: ${PORT}
+      PROJ_NAME: ${PROJ_NAME}
     volumes:
       - ./src:/code
     restart: unless-stopped
