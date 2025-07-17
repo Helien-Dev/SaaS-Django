@@ -38,13 +38,6 @@ ENV PROJ_NAME=${PROJ_NAME}
 WORKDIR /code
 COPY ./src /code
 
-RUN printf '#!/bin/sh\n' > ./paracord_runner.sh && \
-    printf 'PORT="${PORT:-8000}"\n' >> ./paracord_runner.sh && \
-    printf 'python manage.py migrate --no-input\n' >> ./paracord_runner.sh && \
-    printf 'python manage.py collectstatic --noinput\n' >> ./paracord_runner.sh && \
-    printf 'python manage.py vendor_pull || echo "vendor_pull skipped"\n' >> ./paracord_runner.sh && \
-    printf 'gunicorn "$PROJ_NAME.wsgi:application" --bind "[::]:$PORT"\n' >> ./paracord_runner.sh
-
-RUN chmod +x paracord_runner.sh
+RUN chmod +x /code/paracord_runner.sh
 
 CMD ["./paracord_runner.sh"]
