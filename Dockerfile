@@ -37,12 +37,18 @@ WORKDIR /code
 # Copy the requirements file into the container
 COPY requirements.txt /tmp/requirements.txt
 
+# Install the Python project requirements
+RUN pip install -r /tmp/requirements.txt
+
+# INSTALAR GUNICORN Y REQUESTS
+RUN pip install gunicorn
+
 # copy the project code into the container's working directory
 COPY ./src /code
 COPY paracord_runner.sh /code/
 
-# Install the Python project requirements
-RUN pip install -r /tmp/requirements.txt
+# make the bash script executable
+RUN chmod +x /code/paracord_runner.sh
 
 ARG DJANGO_SECRET_KEY
 ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
@@ -50,26 +56,11 @@ ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 ARG DJANGO_DEBUG=0
 ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 
-# database isn't available during build
-# run any other commands that do not need the database
-# such as:
-
-
-# whitenoise -> s3
-
 # set the Django default project name
 ARG PROJ_NAME="SaaS_Project"
 
-# create a bash script to run the Django project
-# this script will execute at runtime when
-# the container starts and the database is available
-
-# make the bash script executable
-RUN chmod +x paracord_runner.sh
-
 # Clean up apt cache to reduce image size
-RUN apt-get remove --purge -y \
-    && apt-get autoremove -y \
+RUN apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
